@@ -46,6 +46,10 @@ function App() {
     setShares(generatedShares.map((s) => btoa(String.fromCharCode(...s))));
   };
 
+  const handleShareChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setShares((shares) => shares.map((s, i) => (i === index ? e.target.value : s)));
+  };
+
   const handleSecretReconstruction = async () => {
     const reconstructedSecret = await combine(shares.map((s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))));
 
@@ -96,7 +100,7 @@ function App() {
           <div key={i} className="flex flex-col gap-2">
             <Label htmlFor="secret">Share #{i + 1}</Label>
             <InputGroup>
-              <InputGroupInput value={share} placeholder="" />
+              <InputGroupInput value={share} onChange={handleShareChange(i)} placeholder="" />
               <InputGroupAddon align="inline-end">
                 <InputGroupButton aria-label="Copy" title="Copy" size="icon-xs">
                   <CopyIcon />
