@@ -76,6 +76,13 @@ function App() {
     }));
   };
 
+  const handleClearShares = () => {
+    setState((s) => ({
+      ...s,
+      shares: s.shares.map(() => ""),
+    }));
+  };
+
   const handleSecretReconstruction = async () => {
     setState((s) => ({ ...s, error: "" }));
 
@@ -184,6 +191,19 @@ function App() {
               </InputGroup>
             </div>
           ))}
+          <div className="mt-4 flex gap-4">
+            <Button variant="outline" onClick={handleTotalShareIncrement} className="flex-1">
+              Add Share
+            </Button>
+            <Button
+              variant="outline"
+              onClick={handleClearShares}
+              disabled={state.shares.every((s) => !s)}
+              className="flex-1"
+            >
+              Clear Shares
+            </Button>
+          </div>
           <Button onClick={handleSecretReconstruction} disabled={state.shares.every((s) => !s)}>
             Reconstruct Secret
           </Button>
