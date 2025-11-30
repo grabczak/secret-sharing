@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { CopyIcon, MinusIcon, PlusIcon } from "lucide-react";
-import { toast } from "sonner";
 import { split, combine } from "shamir-secret-sharing";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -12,72 +12,80 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Toaster } from "@/components/ui/sonner";
 
+type TState = {
+  shares: string[];
+  threshold: number;
+  secret: string;
+  reconstructed: string;
+  error: string;
+};
+
+const initialState: TState = {
+  shares: ["", "", ""],
+  threshold: 2,
+  secret: "",
+  reconstructed: "",
+  error: "",
+};
+
 function App() {
-  const [shares, setShares] = useState<string[]>(["", "", ""]);
-
-  const [threshold, setThreshold] = useState<number>(2);
-
-  const [secret, setSecret] = useState<string>("");
-
-  const [reconstructed, setReconstructed] = useState<string>("");
-
-  const [error, setError] = useState<string>("");
+  const [state, setState] = useState<TState>(initialState);
 
   const handleTotalShareDecrement = () => {
-    setError("");
-
-    setShares((shares) => shares.slice(0, -1));
+    setState((s) => ({ ...s, shares: s.shares.slice(0, -1), error: "" }));
   };
 
   const handleTotalShareIncrement = () => {
-    setError("");
-
-    setShares((shares) => [...shares, ""]);
+    setState((s) => ({ ...s, shares: [...s.shares, ""], error: "" }));
   };
 
   const handleThresholdDecrement = () => {
-    setError("");
-
-    setThreshold((count) => count - 1);
+    setState((s) => ({ ...s, threshold: s.threshold - 1, error: "" }));
   };
 
   const handleThresholdIncrement = () => {
-    setError("");
-
-    setThreshold((count) => count + 1);
+    setState((s) => ({ ...s, threshold: s.threshold + 1, error: "" }));
   };
 
   const handleSecretChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError("");
-
-    setSecret(e.target.value);
+    setState((s) => ({ ...s, secret: e.target.value, error: "" }));
   };
 
   const handleShareGeneration = async () => {
-    setError("");
+    const encodedSecret = new TextEncoder().encode(state.secret.normalize("NFKC"));
 
-    const encodedSecret = new TextEncoder().encode(secret.normalize("NFKC"));
+    const generatedShares = await split(encodedSecret, state.shares.length, state.threshold);
 
-    const generatedShares = await split(encodedSecret, shares.length, threshold);
-
-    setShares(generatedShares.map((s) => btoa(String.fromCharCode(...s))));
+    setState((s) => ({
+      ...s,
+      shares: generatedShares.map((s) => btoa(String.fromCharCode(...s))),
+      error: "",
+    }));
   };
 
   const handleShareChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setError("");
-    setShares((shares) => shares.map((s, i) => (i === index ? e.target.value : s)));
+    setState((s) => ({
+      ...s,
+      shares: s.shares.map((s, i) => (i === index ? e.target.value : s)),
+      error: "",
+    }));
   };
 
   const handleSecretReconstruction = async () => {
-    setError("");
+    setState((s) => ({ ...s, error: "" }));
 
     try {
-      const reconstructedSecret = await combine(shares.map((s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))));
+      const reconstructedSecret = await combine(
+        state.shares.map((s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))),
+      );
 
-      setReconstructed(new TextDecoder().decode(reconstructedSecret));
+      setState((s) => ({
+        ...s,
+        reconstructed: new TextDecoder().decode(reconstructedSecret),
+      }));
     } catch (e) {
       if (e instanceof Error) {
-        setError(e.message);
+        setState((s) => ({ ...s, error: e.message }));
       }
     }
   };
@@ -96,11 +104,16 @@ function App() {
         <div className="flex flex-col gap-2">
           <Label>Shares</Label>
           <ButtonGroup>
-            <Button variant="outline" size="icon-sm" onClick={handleTotalShareDecrement} disabled={shares.length < 3}>
+            <Button
+              variant="outline"
+              size="icon-sm"
+              onClick={handleTotalShareDecrement}
+              disabled={state.shares.length < 3}
+            >
               <MinusIcon />
             </Button>
             <Button variant="outline" size="sm" className="pointer-events-none">
-              {shares.length}
+              {state.shares.length}
             </Button>
             <Button variant="outline" size="icon-sm" onClick={handleTotalShareIncrement}>
               <PlusIcon />
@@ -110,17 +123,17 @@ function App() {
         <div className="flex flex-col gap-2">
           <Label>Threshold</Label>
           <ButtonGroup>
-            <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement} disabled={threshold < 2}>
+            <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement} disabled={state.threshold < 2}>
               <MinusIcon />
             </Button>
             <Button variant="outline" size="sm" className="pointer-events-none">
-              {threshold}
+              {state.threshold}
             </Button>
             <Button
               variant="outline"
               size="icon-sm"
               onClick={handleThresholdIncrement}
-              disabled={threshold >= shares.length}
+              disabled={state.threshold >= state.shares.length}
             >
               <PlusIcon />
             </Button>
@@ -130,17 +143,17 @@ function App() {
           <Label htmlFor="secretToEncode">Secret to encode</Label>
           <Input
             id="secretToEncode"
-            value={secret}
+            value={state.secret}
             onChange={handleSecretChange}
             placeholder="Enter your secret here..."
           />
         </div>
-        <Button onClick={handleShareGeneration} disabled={!secret}>
+        <Button onClick={handleShareGeneration} disabled={!state.secret}>
           Generate Shares
         </Button>
         <Separator />
         <h2 className="text-xl font-bold">Shares</h2>
-        {shares.map((share, i) => (
+        {state.shares.map((share, i) => (
           <div key={i} className="flex flex-col gap-2">
             <Label htmlFor={`share-${i}`}>Share #{i + 1}</Label>
             <InputGroup>
@@ -159,23 +172,23 @@ function App() {
             </InputGroup>
           </div>
         ))}
-        <Button onClick={handleSecretReconstruction} disabled={shares.every((s) => !s)}>
+        <Button onClick={handleSecretReconstruction} disabled={state.shares.every((s) => !s)}>
           Reconstruct Secret
         </Button>
-        <FieldError className="first-letter:uppercase">{error}</FieldError>
+        <FieldError className="first-letter:uppercase">{state.error}</FieldError>
         <Separator />
         <h2 className="text-xl font-bold">Reconstructed Secret</h2>
         <div className="flex flex-col gap-2">
           <Label htmlFor="reconstructedSecret">Secret</Label>
           <InputGroup>
-            <InputGroupInput id="reconstructedSecret" value={reconstructed} readOnly />
+            <InputGroupInput id="reconstructedSecret" value={state.reconstructed} readOnly />
             <InputGroupAddon align="inline-end">
               <InputGroupButton
                 aria-label="Copy"
                 title="Copy"
                 size="icon-xs"
-                onClick={handleCopyToClipboard(reconstructed)}
-                disabled={!reconstructed}
+                onClick={handleCopyToClipboard(state.reconstructed)}
+                disabled={!state.reconstructed}
               >
                 <CopyIcon />
               </InputGroupButton>
