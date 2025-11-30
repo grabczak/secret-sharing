@@ -88,7 +88,7 @@ function App() {
 
     try {
       const reconstructedSecret = await combine(
-        state.shares.map((s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))),
+        state.shares.filter((s) => !!s).map((s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))),
       );
 
       setState((s) => ({
