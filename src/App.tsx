@@ -97,107 +97,114 @@ function App() {
   };
 
   return (
-    <div className="container mx-auto max-w-2xl px-4 py-8">
-      <h1 className="text-center text-4xl font-bold">Secret Sharing</h1>
-      <div className="flex flex-col gap-4 py-8">
-        <h2 className="text-xl font-bold">Secret To Encode</h2>
-        <div className="flex flex-col gap-2">
-          <Label>Shares</Label>
-          <ButtonGroup>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={handleTotalShareDecrement}
-              disabled={state.shares.length < 3}
-            >
-              <MinusIcon />
-            </Button>
-            <Button variant="outline" size="sm" className="pointer-events-none">
-              {state.shares.length}
-            </Button>
-            <Button variant="outline" size="icon-sm" onClick={handleTotalShareIncrement}>
-              <PlusIcon />
-            </Button>
-          </ButtonGroup>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label>Threshold</Label>
-          <ButtonGroup>
-            <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement} disabled={state.threshold < 2}>
-              <MinusIcon />
-            </Button>
-            <Button variant="outline" size="sm" className="pointer-events-none">
-              {state.threshold}
-            </Button>
-            <Button
-              variant="outline"
-              size="icon-sm"
-              onClick={handleThresholdIncrement}
-              disabled={state.threshold >= state.shares.length}
-            >
-              <PlusIcon />
-            </Button>
-          </ButtonGroup>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="secretToEncode">Secret to encode</Label>
-          <Input
-            id="secretToEncode"
-            value={state.secret}
-            onChange={handleSecretChange}
-            placeholder="Enter your secret here..."
-          />
-        </div>
-        <Button onClick={handleShareGeneration} disabled={!state.secret}>
-          Generate Shares
-        </Button>
-        <Separator />
-        <h2 className="text-xl font-bold">Shares</h2>
-        {state.shares.map((share, i) => (
-          <div key={i} className="flex flex-col gap-2">
-            <Label htmlFor={`share-${i}`}>Share #{i + 1}</Label>
+    <>
+      <Toaster />
+      <div className="container mx-auto max-w-2xl px-4 py-8">
+        <h1 className="text-center text-4xl font-bold">Secret Sharing</h1>
+        <div className="flex flex-col gap-4 py-8">
+          <h2 className="text-xl font-bold">Secret To Encode</h2>
+          <div className="flex flex-col gap-2">
+            <Label>Shares</Label>
+            <ButtonGroup>
+              <Button
+                variant="outline"
+                size="icon-sm"
+                onClick={handleTotalShareDecrement}
+                disabled={state.shares.length < 3}
+              >
+                <MinusIcon />
+              </Button>
+              <Button variant="outline" size="sm" className="pointer-events-none">
+                {state.shares.length}
+              </Button>
+              <Button variant="outline" size="icon-sm" onClick={handleTotalShareIncrement}>
+                <PlusIcon />
+              </Button>
+            </ButtonGroup>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label>Threshold</Label>
+            <ButtonGroup>
+              <Button
+                variant="outline"
+                size="icon-sm"
+                onClick={handleThresholdDecrement}
+                disabled={state.threshold < 2}
+              >
+                <MinusIcon />
+              </Button>
+              <Button variant="outline" size="sm" className="pointer-events-none">
+                {state.threshold}
+              </Button>
+              <Button
+                variant="outline"
+                size="icon-sm"
+                onClick={handleThresholdIncrement}
+                disabled={state.threshold >= state.shares.length}
+              >
+                <PlusIcon />
+              </Button>
+            </ButtonGroup>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="secretToEncode">Secret to encode</Label>
+            <Input
+              id="secretToEncode"
+              value={state.secret}
+              onChange={handleSecretChange}
+              placeholder="Enter your secret here..."
+            />
+          </div>
+          <Button onClick={handleShareGeneration} disabled={!state.secret}>
+            Generate Shares
+          </Button>
+          <Separator />
+          <h2 className="text-xl font-bold">Shares</h2>
+          {state.shares.map((share, i) => (
+            <div key={i} className="flex flex-col gap-2">
+              <Label htmlFor={`share-${i}`}>Share #{i + 1}</Label>
+              <InputGroup>
+                <InputGroupInput id={`share-${i}`} value={share} onChange={handleShareChange(i)} />
+                <InputGroupAddon align="inline-end">
+                  <InputGroupButton
+                    aria-label="Copy"
+                    title="Copy"
+                    size="icon-xs"
+                    onClick={handleCopyToClipboard(share)}
+                    disabled={!share}
+                  >
+                    <CopyIcon />
+                  </InputGroupButton>
+                </InputGroupAddon>
+              </InputGroup>
+            </div>
+          ))}
+          <Button onClick={handleSecretReconstruction} disabled={state.shares.every((s) => !s)}>
+            Reconstruct Secret
+          </Button>
+          <FieldError className="first-letter:uppercase">{state.error}</FieldError>
+          <Separator />
+          <h2 className="text-xl font-bold">Reconstructed Secret</h2>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="reconstructedSecret">Secret</Label>
             <InputGroup>
-              <InputGroupInput id={`share-${i}`} value={share} onChange={handleShareChange(i)} />
+              <InputGroupInput id="reconstructedSecret" value={state.reconstructed} readOnly />
               <InputGroupAddon align="inline-end">
                 <InputGroupButton
                   aria-label="Copy"
                   title="Copy"
                   size="icon-xs"
-                  onClick={handleCopyToClipboard(share)}
-                  disabled={!share}
+                  onClick={handleCopyToClipboard(state.reconstructed)}
+                  disabled={!state.reconstructed}
                 >
                   <CopyIcon />
                 </InputGroupButton>
               </InputGroupAddon>
             </InputGroup>
           </div>
-        ))}
-        <Button onClick={handleSecretReconstruction} disabled={state.shares.every((s) => !s)}>
-          Reconstruct Secret
-        </Button>
-        <FieldError className="first-letter:uppercase">{state.error}</FieldError>
-        <Separator />
-        <h2 className="text-xl font-bold">Reconstructed Secret</h2>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="reconstructedSecret">Secret</Label>
-          <InputGroup>
-            <InputGroupInput id="reconstructedSecret" value={state.reconstructed} readOnly />
-            <InputGroupAddon align="inline-end">
-              <InputGroupButton
-                aria-label="Copy"
-                title="Copy"
-                size="icon-xs"
-                onClick={handleCopyToClipboard(state.reconstructed)}
-                disabled={!state.reconstructed}
-              >
-                <CopyIcon />
-              </InputGroupButton>
-            </InputGroupAddon>
-          </InputGroup>
         </div>
       </div>
-      <Toaster />
-    </div>
+    </>
   );
 }
 
