@@ -22,7 +22,7 @@ type TState = {
 
 const initialState: TState = {
   shares: ["", "", ""],
-  threshold: 2,
+  threshold: 3,
   secret: "",
   reconstructed: "",
   error: "",
@@ -32,7 +32,12 @@ function App() {
   const [state, setState] = useState<TState>(initialState);
 
   const handleTotalShareDecrement = () => {
-    setState((s) => ({ ...s, shares: s.shares.slice(0, -1), error: "" }));
+    setState((s) => ({
+      ...s,
+      shares: s.shares.slice(0, -1),
+      threshold: Math.min(s.shares.length - 1, s.threshold),
+      error: "",
+    }));
   };
 
   const handleTotalShareIncrement = () => {
@@ -129,7 +134,7 @@ function App() {
                 variant="outline"
                 size="icon-sm"
                 onClick={handleThresholdDecrement}
-                disabled={state.threshold < 2}
+                disabled={state.threshold < 3}
               >
                 <MinusIcon />
               </Button>
