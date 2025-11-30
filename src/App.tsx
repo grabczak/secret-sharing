@@ -64,7 +64,7 @@ function App() {
         <div className="flex flex-col gap-2">
           <Label>Shares</Label>
           <ButtonGroup>
-            <Button variant="outline" size="icon-sm" onClick={handleTotalShareDecrement}>
+            <Button variant="outline" size="icon-sm" onClick={handleTotalShareDecrement} disabled={shares.length < 3}>
               <MinusIcon />
             </Button>
             <Button variant="outline" size="sm" className="pointer-events-none">
@@ -78,13 +78,18 @@ function App() {
         <div className="flex flex-col gap-2">
           <Label>Threshold</Label>
           <ButtonGroup>
-            <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement}>
+            <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement} disabled={threshold < 2}>
               <MinusIcon />
             </Button>
             <Button variant="outline" size="sm" className="pointer-events-none">
               {threshold}
             </Button>
-            <Button variant="outline" size="icon-sm" onClick={handleThresholdIncrement}>
+            <Button
+              variant="outline"
+              size="icon-sm"
+              onClick={handleThresholdIncrement}
+              disabled={threshold >= shares.length}
+            >
               <PlusIcon />
             </Button>
           </ButtonGroup>
