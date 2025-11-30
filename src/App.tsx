@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CopyIcon, MinusIcon, PlusIcon } from "lucide-react";
+import { toast } from "sonner";
 import { split, combine } from "shamir-secret-sharing";
 
 import { Button } from "@/components/ui/button";
@@ -9,11 +10,12 @@ import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Toaster } from "@/components/ui/sonner";
 
 function App() {
   const [shares, setShares] = useState<string[]>(["", "", ""]);
 
-  const [threshold, setThreshold] = useState<number>(3);
+  const [threshold, setThreshold] = useState<number>(2);
 
   const [secret, setSecret] = useState<string>("");
 
@@ -80,6 +82,12 @@ function App() {
     }
   };
 
+  const handleCopyToClipboard = (s: string) => () => {
+    navigator.clipboard.writeText(s);
+
+    toast.success("Copied to clipboard");
+  };
+
   return (
     <div className="container mx-auto max-w-2xl px-4 py-8">
       <h1 className="text-center text-4xl font-bold">Secret Sharing</h1>
@@ -138,7 +146,13 @@ function App() {
             <InputGroup>
               <InputGroupInput id={`share-${i}`} value={share} onChange={handleShareChange(i)} />
               <InputGroupAddon align="inline-end">
-                <InputGroupButton aria-label="Copy" title="Copy" size="icon-xs">
+                <InputGroupButton
+                  aria-label="Copy"
+                  title="Copy"
+                  size="icon-xs"
+                  onClick={handleCopyToClipboard(share)}
+                  disabled={!share}
+                >
                   <CopyIcon />
                 </InputGroupButton>
               </InputGroupAddon>
@@ -156,13 +170,20 @@ function App() {
           <InputGroup>
             <InputGroupInput id="reconstructedSecret" value={reconstructed} readOnly />
             <InputGroupAddon align="inline-end">
-              <InputGroupButton aria-label="Copy" title="Copy" size="icon-xs">
+              <InputGroupButton
+                aria-label="Copy"
+                title="Copy"
+                size="icon-xs"
+                onClick={handleCopyToClipboard(reconstructed)}
+                disabled={!reconstructed}
+              >
                 <CopyIcon />
               </InputGroupButton>
             </InputGroupAddon>
           </InputGroup>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }
