@@ -62,7 +62,7 @@ function App() {
       <div className="flex flex-col gap-4 py-8">
         <h2 className="text-xl font-bold">Secret To Encode</h2>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="secret">Shares</Label>
+          <Label>Shares</Label>
           <ButtonGroup>
             <Button variant="outline" size="icon-sm" onClick={handleTotalShareDecrement}>
               <MinusIcon />
@@ -76,7 +76,7 @@ function App() {
           </ButtonGroup>
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="secret">Threshold</Label>
+          <Label>Threshold</Label>
           <ButtonGroup>
             <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement}>
               <MinusIcon />
@@ -90,17 +90,22 @@ function App() {
           </ButtonGroup>
         </div>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="secret">Secret to encode</Label>
-          <Input id="secret" onChange={handleSecretChange} value={secret} placeholder="Enter your secret here..." />
+          <Label htmlFor="secretToEncode">Secret to encode</Label>
+          <Input
+            id="secretToEncode"
+            value={secret}
+            onChange={handleSecretChange}
+            placeholder="Enter your secret here..."
+          />
         </div>
         <Button onClick={handleShareGeneration}>Generate Shares</Button>
         <Separator />
         <h2 className="text-xl font-bold">Shares</h2>
         {shares.map((share, i) => (
           <div key={i} className="flex flex-col gap-2">
-            <Label htmlFor="secret">Share #{i + 1}</Label>
+            <Label htmlFor={`share-${i}`}>Share #{i + 1}</Label>
             <InputGroup>
-              <InputGroupInput value={share} onChange={handleShareChange(i)} placeholder="" />
+              <InputGroupInput id={`share-${i}`} value={share} onChange={handleShareChange(i)} />
               <InputGroupAddon align="inline-end">
                 <InputGroupButton aria-label="Copy" title="Copy" size="icon-xs">
                   <CopyIcon />
@@ -113,9 +118,9 @@ function App() {
         <Separator />
         <h2 className="text-xl font-bold">Reconstructed Secret</h2>
         <div className="flex flex-col gap-2">
-          <Label htmlFor="secret">Secret</Label>
+          <Label htmlFor="reconstructedSecret">Secret</Label>
           <InputGroup>
-            <InputGroupInput value={reconstructed} placeholder="" readOnly />
+            <InputGroupInput id="reconstructedSecret" value={reconstructed} readOnly />
             <InputGroupAddon align="inline-end">
               <InputGroupButton aria-label="Copy" title="Copy" size="icon-xs">
                 <CopyIcon />
