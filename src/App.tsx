@@ -210,7 +210,7 @@ function App() {
               Clear Shares
             </Button>
           </div>
-          <Button onClick={handleSecretReconstruction} disabled={state.shares.every((s) => !s)}>
+          <Button onClick={handleSecretReconstruction} disabled={state.shares.filter((s) => !!s).length < 2}>
             Reconstruct Secret
           </Button>
           <FieldError className="first-letter:uppercase">{state.error}</FieldError>
