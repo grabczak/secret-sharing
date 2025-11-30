@@ -111,9 +111,9 @@ function App() {
   return (
     <>
       <Toaster />
-      <div className="container mx-auto max-w-2xl px-4 py-8">
-        <h1 className="text-center text-4xl font-bold">Secret Sharing</h1>
-        <div className="flex flex-col gap-4 py-8">
+      <div className="container mx-auto flex h-full max-w-2xl flex-col justify-between px-4 pt-8">
+        <div className="flex flex-col gap-4">
+          <h1 className="text-center text-4xl font-bold">Secret Sharing</h1>
           <h2 className="text-xl font-bold">Secret To Encode</h2>
           <div className="flex flex-col gap-2">
             <Label>Shares</Label>
@@ -221,6 +221,13 @@ function App() {
             <Textarea id="reconstructedSecret" value={state.reconstructed} readOnly className="font-mono" />
           </div>
         </div>
+        <footer className="text-muted-foreground pt-8 pb-4 text-center text-sm">
+          © 2025{" "}
+          <a href="https://github.com/grabczak" target="_blank">
+            grabczak
+          </a>{" "}
+          — GPLv3
+        </footer>
       </div>
     </>
   );

@@ -125,3 +125,13 @@
     cursor: pointer;
   }
 }
+
+html,
+body,
+#root {
+  @apply h-full;
+}
+
+a {
+  @apply text-blue-600 underline visited:text-purple-600 hover:text-blue-800;
+}
