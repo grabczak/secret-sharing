@@ -126,7 +126,7 @@ function App() {
               >
                 <MinusIcon />
               </Button>
-              <Button variant="outline" size="sm" className="pointer-events-none">
+              <Button variant="outline" size="sm" className="text-md pointer-events-none font-mono">
                 {state.shares.length}
               </Button>
               <Button variant="outline" size="icon-sm" onClick={handleTotalShareIncrement}>
@@ -145,7 +145,7 @@ function App() {
               >
                 <MinusIcon />
               </Button>
-              <Button variant="outline" size="sm" className="pointer-events-none">
+              <Button variant="outline" size="sm" className="text-md pointer-events-none font-mono">
                 {state.threshold}
               </Button>
               <Button
@@ -159,12 +159,13 @@ function App() {
             </ButtonGroup>
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="secretToEncode">Secret to encode</Label>
+            <Label htmlFor="secretToEncode">Secret</Label>
             <Input
               id="secretToEncode"
               value={state.secret}
               onChange={handleSecretChange}
               placeholder="Enter your secret here..."
+              className="font-mono"
             />
           </div>
           <Button onClick={handleShareGeneration} disabled={!state.secret}>
@@ -176,7 +177,12 @@ function App() {
             <div key={i} className="flex flex-col gap-2">
               <Label htmlFor={`share-${i}`}>Share #{i + 1}</Label>
               <InputGroup>
-                <InputGroupInput id={`share-${i}`} value={share} onChange={handleShareChange(i)} />
+                <InputGroupInput
+                  id={`share-${i}`}
+                  value={share}
+                  onChange={handleShareChange(i)}
+                  className="font-mono"
+                />
                 <InputGroupAddon align="inline-end">
                   <InputGroupButton
                     aria-label="Copy"
@@ -212,20 +218,7 @@ function App() {
           <h2 className="text-xl font-bold">Reconstructed Secret</h2>
           <div className="flex flex-col gap-2">
             <Label htmlFor="reconstructedSecret">Secret</Label>
-            <InputGroup>
-              <InputGroupInput id="reconstructedSecret" value={state.reconstructed} readOnly />
-              <InputGroupAddon align="inline-end">
-                <InputGroupButton
-                  aria-label="Copy"
-                  title="Copy"
-                  size="icon-xs"
-                  onClick={handleCopyToClipboard(state.reconstructed)}
-                  disabled={!state.reconstructed}
-                >
-                  <CopyIcon />
-                </InputGroupButton>
-              </InputGroupAddon>
-            </InputGroup>
+            <Input id="reconstructedSecret" value={state.reconstructed} readOnly className="font-mono" />
           </div>
         </div>
       </div>
