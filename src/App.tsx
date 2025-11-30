@@ -6,10 +6,10 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { FieldError } from "./components/ui/field";
-import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { Toaster } from "@/components/ui/sonner";
 
 type TState = {
@@ -52,7 +52,7 @@ function App() {
     setState((s) => ({ ...s, threshold: s.threshold + 1, error: "" }));
   };
 
-  const handleSecretChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSecretChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setState((s) => ({ ...s, secret: e.target.value, error: "" }));
   };
 
@@ -160,7 +160,7 @@ function App() {
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="secretToEncode">Secret</Label>
-            <Input
+            <Textarea
               id="secretToEncode"
               value={state.secret}
               onChange={handleSecretChange}
@@ -218,7 +218,7 @@ function App() {
           <h2 className="text-xl font-bold">Reconstructed Secret</h2>
           <div className="flex flex-col gap-2">
             <Label htmlFor="reconstructedSecret">Secret</Label>
-            <Input id="reconstructedSecret" value={state.reconstructed} readOnly className="font-mono" />
+            <Textarea id="reconstructedSecret" value={state.reconstructed} readOnly className="font-mono" />
           </div>
         </div>
       </div>
