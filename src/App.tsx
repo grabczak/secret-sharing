@@ -4,6 +4,7 @@ import { split, combine } from "shamir-secret-sharing";
 
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
+import { FieldError } from "./components/ui/field";
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Label } from "@/components/ui/label";
@@ -18,27 +19,41 @@ function App() {
 
   const [reconstructed, setReconstructed] = useState<string>("");
 
+  const [error, setError] = useState<string>("");
+
   const handleTotalShareDecrement = () => {
+    setError("");
+
     setShares((shares) => shares.slice(0, -1));
   };
 
   const handleTotalShareIncrement = () => {
+    setError("");
+
     setShares((shares) => [...shares, ""]);
   };
 
   const handleThresholdDecrement = () => {
+    setError("");
+
     setThreshold((count) => count - 1);
   };
 
   const handleThresholdIncrement = () => {
+    setError("");
+
     setThreshold((count) => count + 1);
   };
 
   const handleSecretChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError("");
+
     setSecret(e.target.value);
   };
 
   const handleShareGeneration = async () => {
+    setError("");
+
     const encodedSecret = new TextEncoder().encode(secret.normalize("NFKC"));
 
     const generatedShares = await split(encodedSecret, shares.length, threshold);
@@ -47,13 +62,22 @@ function App() {
   };
 
   const handleShareChange = (index: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError("");
     setShares((shares) => shares.map((s, i) => (i === index ? e.target.value : s)));
   };
 
   const handleSecretReconstruction = async () => {
-    const reconstructedSecret = await combine(shares.map((s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))));
+    setError("");
 
-    setReconstructed(new TextDecoder().decode(reconstructedSecret));
+    try {
+      const reconstructedSecret = await combine(shares.map((s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))));
+
+      setReconstructed(new TextDecoder().decode(reconstructedSecret));
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message);
+      }
+    }
   };
 
   return (
@@ -124,6 +148,7 @@ function App() {
         <Button onClick={handleSecretReconstruction} disabled={shares.every((s) => !s)}>
           Reconstruct Secret
         </Button>
+        <FieldError className="first-letter:uppercase">{error}</FieldError>
         <Separator />
         <h2 className="text-xl font-bold">Reconstructed Secret</h2>
         <div className="flex flex-col gap-2">
