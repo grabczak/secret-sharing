@@ -103,7 +103,9 @@ function App() {
             placeholder="Enter your secret here..."
           />
         </div>
-        <Button onClick={handleShareGeneration}>Generate Shares</Button>
+        <Button onClick={handleShareGeneration} disabled={!secret}>
+          Generate Shares
+        </Button>
         <Separator />
         <h2 className="text-xl font-bold">Shares</h2>
         {shares.map((share, i) => (
@@ -119,7 +121,9 @@ function App() {
             </InputGroup>
           </div>
         ))}
-        <Button onClick={handleSecretReconstruction}>Reconstruct Secret</Button>
+        <Button onClick={handleSecretReconstruction} disabled={shares.every((s) => !s)}>
+          Reconstruct Secret
+        </Button>
         <Separator />
         <h2 className="text-xl font-bold">Reconstructed Secret</h2>
         <div className="flex flex-col gap-2">
