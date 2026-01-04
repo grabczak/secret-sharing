@@ -83,18 +83,13 @@ export function SecretEncoder() {
           <Field>
             <FieldLabel>Threshold (k)</FieldLabel>
             <ButtonGroup>
-              <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement} disabled={threshold < 3}>
+              <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement} disabled={threshold <= 2}>
                 <MinusIcon />
               </Button>
               <Button variant="outline" size="sm" className="text-md pointer-events-none font-mono">
                 {threshold}
               </Button>
-              <Button
-                variant="outline"
-                size="icon-sm"
-                onClick={handleThresholdIncrement}
-                disabled={threshold >= shares.length}
-              >
+              <Button variant="outline" size="icon-sm" onClick={handleThresholdIncrement}>
                 <PlusIcon />
               </Button>
             </ButtonGroup>
@@ -102,7 +97,12 @@ export function SecretEncoder() {
           <Field>
             <FieldLabel>Shares (n)</FieldLabel>
             <ButtonGroup>
-              <Button variant="outline" size="icon-sm" onClick={handleTotalShareDecrement} disabled={shares.length < 3}>
+              <Button
+                variant="outline"
+                size="icon-sm"
+                onClick={handleTotalShareDecrement}
+                disabled={shares.length <= 2}
+              >
                 <MinusIcon />
               </Button>
               <Button variant="outline" size="sm" className="text-md pointer-events-none font-mono">

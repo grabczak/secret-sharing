@@ -8,7 +8,7 @@ import { FieldError, Field, FieldSet, FieldLabel } from "@/components/ui/field";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 
 import { useAppDispatch, useAppSelector } from "@/store";
-import { incrementShares, setShare, clearShares, setReconstructedSecret } from "@/store/sharing";
+import { incrementShares, setShare, clearShares, setReconstructed } from "@/store/sharing";
 
 export function GeneratedShares() {
   const { shares } = useAppSelector((state) => state.sharing);
@@ -45,7 +45,7 @@ export function GeneratedShares() {
         shares.filter((s) => !!s).map((s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0))),
       );
 
-      dispatch(setReconstructedSecret({ reconstructedSecret: new TextDecoder().decode(reconstructedSecret) }));
+      dispatch(setReconstructed({ reconstructed: new TextDecoder().decode(reconstructedSecret) }));
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message);
