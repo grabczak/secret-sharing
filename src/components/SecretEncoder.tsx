@@ -77,7 +77,7 @@ export function SecretEncoder() {
 
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold">Secret To Encode</h2>
+      <h2 className="text-xl font-bold">Protocol Parameters</h2>
       <form ref={formRef} onSubmit={handleShareGeneration} className="flex flex-col gap-4">
         <FieldSet className="gap-4">
           <Field>

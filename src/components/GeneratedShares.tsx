@@ -67,7 +67,7 @@ export function GeneratedShares() {
 
   return (
     <section className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold">Shares</h2>
+      <h2 className="text-xl font-bold">Generated Shares</h2>
       <form ref={formRef} onSubmit={handleSecretReconstruction} className="flex flex-col gap-8">
         <FieldSet className="gap-4">
           {shares.map((share, i) => (

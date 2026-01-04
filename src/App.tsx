@@ -12,16 +12,17 @@ function App() {
   return (
     <Provider store={store}>
       <Toaster />
-      <div className="container mx-auto flex h-full max-w-2xl flex-col justify-between px-4 pt-8">
-        <div className="flex flex-col gap-4">
-          <h1 className="mb-2 text-center text-4xl font-bold">Secret Sharing</h1>
+      <div className="container mx-auto flex min-h-full max-w-2xl flex-col justify-between px-4">
+        <div className="flex flex-col gap-4 pt-8">
+          <h1 className="text-center text-4xl font-bold">Secret Sharing</h1>
+          <p className="text-center">Securely split a secret into shares and recover it only with enough parts.</p>
           <SecretEncoder />
           <Separator />
           <GeneratedShares />
           <Separator />
           <ReconstructedSecret />
         </div>
-        <footer className="text-muted-foreground pt-8 pb-4 text-center text-sm">
+        <footer className="text-muted-foreground py-8 text-center text-sm">
           © 2026{" "}
           <a href="https://github.com/grabczak" target="_blank">
             grabczak
