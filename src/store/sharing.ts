@@ -5,7 +5,6 @@ type TState = {
   shares: string[];
   secret: string;
   reconstructedSecret: string;
-  error: string;
 };
 
 const initialState: TState = {
@@ -13,7 +12,6 @@ const initialState: TState = {
   shares: ["", "", ""],
   secret: "",
   reconstructedSecret: "",
-  error: "",
 };
 
 export const sharingSlice = createSlice({
@@ -46,9 +44,6 @@ export const sharingSlice = createSlice({
     clearShares: (state) => {
       state.shares = state.shares.map(() => "");
     },
-    setError: (state, action: PayloadAction<{ error: string }>) => {
-      state.error = action.payload.error;
-    },
     setReconstructedSecret: (state, action: PayloadAction<{ reconstructedSecret: string }>) => {
       state.reconstructedSecret = action.payload.reconstructedSecret;
     },
@@ -61,7 +56,6 @@ export const {
   decrementThreshold,
   incrementShares,
   incrementThreshold,
-  setError,
   setReconstructedSecret,
   setSecret,
   setShare,
