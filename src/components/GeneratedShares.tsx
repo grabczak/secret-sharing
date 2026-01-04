@@ -100,12 +100,12 @@ export function GeneratedShares() {
         </FieldSet>
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
-            <Button variant="outline" type="button" onClick={handleTotalShareIncrement} className="flex-1">
+            <Button type="button" variant="outline" onClick={handleTotalShareIncrement} className="flex-1">
               Add Share
             </Button>
             <Button
-              variant="outline"
               type="button"
+              variant="outline"
               onClick={handleClearShares}
               disabled={shares.every((s) => !s)}
               className="flex-1"

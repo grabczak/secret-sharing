@@ -83,13 +83,19 @@ export function SecretEncoder() {
           <Field>
             <FieldLabel>Threshold (k)</FieldLabel>
             <ButtonGroup>
-              <Button variant="outline" size="icon-sm" onClick={handleThresholdDecrement} disabled={threshold <= 2}>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon-sm"
+                onClick={handleThresholdDecrement}
+                disabled={threshold <= 2}
+              >
                 <MinusIcon />
               </Button>
-              <Button variant="outline" size="sm" className="text-md pointer-events-none font-mono">
+              <Button type="button" variant="outline" size="sm" className="text-md pointer-events-none font-mono">
                 {threshold}
               </Button>
-              <Button variant="outline" size="icon-sm" onClick={handleThresholdIncrement}>
+              <Button type="button" variant="outline" size="icon-sm" onClick={handleThresholdIncrement}>
                 <PlusIcon />
               </Button>
             </ButtonGroup>
@@ -98,6 +104,7 @@ export function SecretEncoder() {
             <FieldLabel>Shares (n)</FieldLabel>
             <ButtonGroup>
               <Button
+                type="button"
                 variant="outline"
                 size="icon-sm"
                 onClick={handleTotalShareDecrement}
@@ -105,10 +112,10 @@ export function SecretEncoder() {
               >
                 <MinusIcon />
               </Button>
-              <Button variant="outline" size="sm" className="text-md pointer-events-none font-mono">
+              <Button type="button" variant="outline" size="sm" className="text-md pointer-events-none font-mono">
                 {shares.length}
               </Button>
-              <Button variant="outline" size="icon-sm" onClick={handleTotalShareIncrement}>
+              <Button type="button" variant="outline" size="icon-sm" onClick={handleTotalShareIncrement}>
                 <PlusIcon />
               </Button>
             </ButtonGroup>
