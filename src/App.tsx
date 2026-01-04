@@ -22,7 +22,7 @@ function App() {
           <ReconstructedSecret />
         </div>
         <footer className="text-muted-foreground pt-8 pb-4 text-center text-sm">
-          © 2025{" "}
+          © 2026{" "}
           <a href="https://github.com/grabczak" target="_blank">
             grabczak
           </a>{" "}
